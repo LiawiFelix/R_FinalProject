@@ -60,7 +60,7 @@ for(i in nrow(df.raw):1){
   if(df.raw$region[i]=="Cote_dIvoire"){
     df.raw$region[i]="Ivory Coast"
   }
-  if(df.raw$region[i]=="CuraÃ§ao"){
+  if(df.raw$region[i]=="Curaçao"){
     df.raw$region[i]="Curacao"
   }
   if(df.raw$region[i]=="Czechia"){
@@ -199,7 +199,9 @@ for(i in nrow(df.raw):1){
 
 #world map
 worldMap <- map_data("world")
-print(nrow(worldMap))
+
+# print(nrow(worldMap))
+
 for(i in 1:nrow(worldMap)){
   if(worldMap$region[i]=="Nevis" || worldMap$region[i]=="Saint Kitts"){
     worldMap$region[i]="Saint Kitts and Nevis"
@@ -232,24 +234,27 @@ plot_list[[7]] <- ggplot() +
   coord_fixed(1.3) +
   scale_fill_gradientn(colors=c("white","yellow","red"),
                        values=rescale(c(0,10000,100000,1000000)),
-                       limits=c(0,2000000), na.value="grey80")+
+                       limits=c(0,2000000), na.value="white")+
   labs(title=t)
 
 plot_list= list()
 
+world<-ggplot()+ geom_polygon(data = worldMap, aes(x=long, y = lat, group = group),fill="white")
+
 for(i in (1:52)){
   join_result1 <- join_result %>%filter(year_week == unique_year_week[i])
-  t= paste0("Total number of infected person week ",i)
-  print(unique_year_week[i])
-  plot_list[[i]] <- ggplot() + 
+  t= paste0("Year 2020 Week ",i)
+  # print(unique_year_week[i])
+  plot_list[[i]] <- world +
     geom_polygon(data = join_result1, aes(x=long, y = lat, fill=cases_weekly, group = group),
                  color="white") + 
     coord_fixed(1.3) +
-    scale_fill_gradientn(colors=c("white","yellow","red"),
-                         values=rescale(c(0,10000,100000,1000000)),
-                         limits=c(0,20000000))+
+    scale_fill_gradientn("# of infected cases",colors=c("white","yellow","red","brown"),
+                         values=rescale(c(0,100,1000,10000,100000,1000000,10000000)),
+                         limits=c(0,20000000), na.value="white")+
     labs(title=t)
 }
+
 
 library(animation)
 animation::saveGIF(
@@ -259,5 +264,5 @@ animation::saveGIF(
     }
     
   },
-  movie.name = "res2.gif", ani.width= 800, ani.height= 600
+  movie.name = "runresult.gif", ani.width= 800, ani.height= 600
 )
