@@ -59,7 +59,7 @@ for(i in nrow(df.raw):1){
   if(df.raw$region[i]=="Cote_dIvoire"){
     df.raw$region[i]="Ivory Coast"
   }
-  if(df.raw$region[i]=="Curaçao"){
+  if(df.raw$region[i]=="CuraÃ§ao"){
     df.raw$region[i]="Curacao"
   }
   if(df.raw$region[i]=="Czechia"){
@@ -216,19 +216,31 @@ for(i in 1:nrow(worldMap)){
 
 test_data <- df.raw[order(df.raw$year_week),]
 
+unique_year_week= unique(test_data$year_week)
+
 join_result <- left_join(worldMap, test_data)
 
-for(i in (length(unique(join_result$year_week)):1)){
-  print(i)
+plot_list= list()
+
+for(i in (length(unique_year_week):1)){
   join_result1 <- join_result %>%
-    filter(year_week == join_result$year_week[i])
-  
-  ggplot() + 
+    filter(year_week == unique_year_week[i])
+  t= paste0("Total number of infected person week ",length(unique_year_week)-i+1)
+  plot_list[[length(unique_year_week)-i+1]] <- ggplot() + 
     geom_polygon(data = join_result1, aes(x=long, y = lat, fill=cases_weekly, group = group),
                  color="white") + 
     coord_fixed(1.3) +
     scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
-    labs(title="Total number of infected person")
-  
-  Sys.sleep(0.2)
+    labs(title=t)
 }
+
+library(animation)
+animation::saveGIF(
+  expr={
+    for(i in (1:length(unique_year_week))){
+      plot(plot_list[[i]])
+    }
+    
+  },
+  movie.name = "res1.gif"
+)
