@@ -9,6 +9,7 @@
 # install.packages("tibble")
 library(maps)
 library(dplyr)
+library(scales)
 library(viridisLite)
 library(viridis)
 library(maps) 
@@ -216,6 +217,9 @@ for(i in 1:nrow(worldMap)){
 
 test_data <- df.raw[order(df.raw$year_week),]
 
+#got max data
+md <- max(test_data$cases_weekly)
+
 unique_year_week= unique(test_data$year_week)
 
 join_result <- left_join(worldMap, test_data)
@@ -230,7 +234,9 @@ for(i in (length(unique_year_week):1)){
     geom_polygon(data = join_result1, aes(x=long, y = lat, fill=cases_weekly, group = group),
                  color="white") + 
     coord_fixed(1.3) +
-    scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
+    scale_fill_gradientn(colors=c("white","yellow","red"),
+                        values=rescale(c(0,10000,100000,1000000)),
+                        limits=c(0,2000000), na.value="grey80")+
     labs(title=t)
 }
 
@@ -242,5 +248,5 @@ animation::saveGIF(
     }
     
   },
-  movie.name = "res1.gif"
+  movie.name = "res2.gif", ani.width= 800, ani.height= 600
 )
