@@ -244,14 +244,14 @@ world<-ggplot()+ geom_polygon(data = worldMap, aes(x=long, y = lat, group = grou
 
 for(i in (1:52)){
   join_result1 <- join_result %>%filter(year_week == unique_year_week[i])
-  t= paste0("Total number of infected person week ",i)
+  t= paste0("Year 2020 Week ",i)
   # print(unique_year_week[i])
   plot_list[[i]] <- world +
     geom_polygon(data = join_result1, aes(x=long, y = lat, fill=cases_weekly, group = group),
                  color="white") + 
     coord_fixed(1.3) +
-    scale_fill_gradientn(colors=c("white","yellow","red"),
-                         values=rescale(c(0,10000,100000,1000000)),
+    scale_fill_gradientn(colors=c("white","yellow","red","brown"),
+                         values=rescale(c(0,100,1000,10000,100000,1000000,10000000)),
                          limits=c(0,20000000), na.value="white")+
     labs(title=t)
 }
@@ -265,5 +265,5 @@ animation::saveGIF(
     }
     
   },
-  movie.name = "resqqqq.gif", ani.width= 800, ani.height= 600
+  movie.name = "runresult.gif", ani.width= 800, ani.height= 600
 )
