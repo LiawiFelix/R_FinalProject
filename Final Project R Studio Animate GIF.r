@@ -9,6 +9,7 @@
 # install.packages("tibble")
 library(maps)
 library(dplyr)
+library(scales)
 library(viridisLite)
 library(viridis)
 library(maps) 
@@ -59,7 +60,7 @@ for(i in nrow(df.raw):1){
   if(df.raw$region[i]=="Cote_dIvoire"){
     df.raw$region[i]="Ivory Coast"
   }
-  if(df.raw$region[i]=="CuraÃ§ao"){
+  if(df.raw$region[i]=="Curaçao"){
     df.raw$region[i]="Curacao"
   }
   if(df.raw$region[i]=="Czechia"){
@@ -198,7 +199,9 @@ for(i in nrow(df.raw):1){
 
 #world map
 worldMap <- map_data("world")
-print(nrow(worldMap))
+
+# print(nrow(worldMap))
+
 for(i in 1:nrow(worldMap)){
   if(worldMap$region[i]=="Nevis" || worldMap$region[i]=="Saint Kitts"){
     worldMap$region[i]="Saint Kitts and Nevis"
@@ -214,117 +217,53 @@ for(i in 1:nrow(worldMap)){
   }
 }
 
-test_data <- df.raw %>% filter(year_week == "2020-01")
+test_data <- df.raw[order(df.raw$year_week),]
+
+#got max data
+md <- max(test_data$cases_weekly)
+
+unique_year_week= unique(test_data$year_week)
 
 join_result <- left_join(worldMap, test_data)
 
-data1 <- ggplot() + 
-  geom_polygon(data = join_result, aes(x=long, y = lat, fill=cases_weekly, group = group),
+join_result1 <- join_result %>% filter(year_week == "2020-07")
+t= paste0("Total number of infected person week ",7)
+plot_list[[7]] <- ggplot() + 
+  geom_polygon(data = join_result1, aes(x=long, y = lat, fill=cases_weekly, group = group),
                color="white") + 
   coord_fixed(1.3) +
-  scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
-  labs(title="Total number of human exposures week 1")
+  scale_fill_gradientn(colors=c("white","yellow","red"),
+                       values=rescale(c(0,10000,100000,1000000)),
+                       limits=c(0,2000000), na.value="white")+
+  labs(title=t)
 
+plot_list= list()
 
-test_data <- df.raw %>% filter(year_week == "2020-02")
-join_result <- left_join(worldMap, test_data)
+world<-ggplot()+ geom_polygon(data = worldMap, aes(x=long, y = lat, group = group),
+                              ,fill="white")
 
-data2 <- ggplot() + 
-  geom_polygon(data = join_result, aes(x=long, y = lat, fill=cases_weekly, group = group),
-               color="white") + 
-  coord_fixed(1.3) +
-  scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
-  labs(title="Total number of human exposures week 2")
-
-test_data <- df.raw %>% filter(year_week == "2020-03")
-join_result <- left_join(worldMap, test_data)
-data3 <- ggplot() + 
-  geom_polygon(data = join_result, aes(x=long, y = lat, fill=cases_weekly, group = group),
-               color="white") + 
-  coord_fixed(1.3) +
-  scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
-  labs(title="Total number of human exposures week 3")
-
-#week 4
-test_data <- df.raw %>% filter(year_week == "2020-04")
-join_result <- left_join(worldMap, test_data)
-data4 <- ggplot() + 
-  geom_polygon(data = join_result, aes(x=long, y = lat, fill=cases_weekly, group = group),
-               color="white") + 
-  coord_fixed(1.3) +
-  scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
-  labs(title="Total number of human exposures week 4")
-
-#week 5
-test_data <- df.raw %>% filter(year_week == "2020-05")
-join_result <- left_join(worldMap, test_data)
-data5 <- ggplot() + 
-  geom_polygon(data = join_result, aes(x=long, y = lat, fill=cases_weekly, group = group),
-               color="white") + 
-  coord_fixed(1.3) +
-  scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
-  labs(title="Total number of human exposures week 5")
-
-#week 6
-test_data <- df.raw %>% filter(year_week == "2020-06")
-join_result <- left_join(worldMap, test_data)
-data6 <- ggplot() + 
-  geom_polygon(data = join_result, aes(x=long, y = lat, fill=cases_weekly, group = group),
-               color="white") + 
-  coord_fixed(1.3) +
-  scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
-  labs(title="Total number of human exposures week 6")
-
-#week 7
-test_data <- df.raw %>% filter(year_week == "2020-07")
-join_result <- left_join(worldMap, test_data)
-data7 <- ggplot() + 
-  geom_polygon(data = join_result, aes(x=long, y = lat, fill=cases_weekly, group = group),
-               color="white") + 
-  coord_fixed(1.3) +
-  scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
-  labs(title="Total number of human exposures week 7")
-
-#week 8
-test_data <- df.raw %>% filter(year_week == "2020-07")
-join_result <- left_join(worldMap, test_data)
-data8 <- ggplot() + 
-  geom_polygon(data = join_result, aes(x=long, y = lat, fill=cases_weekly, group = group),
-               color="white") + 
-  coord_fixed(1.3) +
-  scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
-  labs(title="Total number of human exposures week 8")
-
-#week 52
-test_data <- df.raw %>% filter(year_week == "2020-52")
-join_result <- left_join(worldMap, test_data)
-
-data52 <- ggplot() + 
-  geom_polygon(data = join_result, aes(x=long, y = lat, fill=cases_weekly, group = group),
-               color="white") + 
-  coord_fixed(1.3) +
-  scale_fill_gradient(low = "yellow", high = "red", na.value="grey80") +
-  labs(title="Total number of human exposures week 52")
-
-res<-list()
-
-res <-c(list(data1),list(data2),list(data3),list(data4),list(data5),list(data6))
-for(i in 1:length(res)){
-  res[i]
+for(i in (1:52)){
+  join_result1 <- join_result %>%filter(year_week == unique_year_week[i])
+  t= paste0("Total number of infected person week ",i)
+  # print(unique_year_week[i])
+  plot_list[[i]] <- world +
+    geom_polygon(data = join_result1, aes(x=long, y = lat, fill=cases_weekly, group = group),
+                 color="white") + 
+    coord_fixed(1.3) +
+    scale_fill_gradientn(colors=c("white","yellow","red"),
+                         values=rescale(c(0,10000,100000,1000000)),
+                         limits=c(0,20000000), na.value="white")+
+    labs(title=t)
 }
-# install.packages("animation")
+
+
 library(animation)
 animation::saveGIF(
   expr={
-    plot(data1)
-    plot(data2)
-    plot(data3)
-    plot(data4)
-    plot(data5)
-    plot(data6)
-    plot(data7)
-    plot(data8)
-    plot(data52)
+    for(i in (1:length(unique_year_week))){
+      plot(plot_list[[i]])
+    }
+    
   },
-  movie.name = "data1_8and52.gif"
+  movie.name = "resqqqq.gif", ani.width= 800, ani.height= 600
 )
