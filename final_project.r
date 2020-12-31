@@ -60,7 +60,7 @@ for(i in nrow(df.raw):1){
   if(df.raw$region[i]=="Cote_dIvoire"){
     df.raw$region[i]="Ivory Coast"
   }
-  if(df.raw$region[i]=="CuraÃ§ao"){
+  if(df.raw$region[i]=="Curaçao"){
     df.raw$region[i]="Curacao"
   }
   if(df.raw$region[i]=="Czechia"){
@@ -224,19 +224,30 @@ unique_year_week= unique(test_data$year_week)
 
 join_result <- left_join(worldMap, test_data)
 
+join_result1 <- join_result %>% filter(year_week == "2020-07")
+t= paste0("Total number of infected person week ",7)
+plot_list[[7]] <- ggplot() + 
+  geom_polygon(data = join_result1, aes(x=long, y = lat, fill=cases_weekly, group = group),
+               color="white") + 
+  coord_fixed(1.3) +
+  scale_fill_gradientn(colors=c("white","yellow","red"),
+                       values=rescale(c(0,10000,100000,1000000)),
+                       limits=c(0,2000000), na.value="grey80")+
+  labs(title=t)
+
 plot_list= list()
 
-for(i in (length(unique_year_week):1)){
-  join_result1 <- join_result %>%
-    filter(year_week == unique_year_week[i])
-  t= paste0("Total number of infected person week ",length(unique_year_week)-i+1)
-  plot_list[[length(unique_year_week)-i+1]] <- ggplot() + 
+for(i in (1:52)){
+  join_result1 <- join_result %>%filter(year_week == unique_year_week[i])
+  t= paste0("Total number of infected person week ",i)
+  print(unique_year_week[i])
+  plot_list[[i]] <- ggplot() + 
     geom_polygon(data = join_result1, aes(x=long, y = lat, fill=cases_weekly, group = group),
                  color="white") + 
     coord_fixed(1.3) +
     scale_fill_gradientn(colors=c("white","yellow","red"),
-                        values=rescale(c(0,10000,100000,1000000)),
-                        limits=c(0,2000000), na.value="grey80")+
+                         values=rescale(c(0,10000,100000,1000000)),
+                         limits=c(0,20000000))+
     labs(title=t)
 }
 
