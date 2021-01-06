@@ -9,7 +9,7 @@ Library Used:
 - animation
 
 Dataset:\
-https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-data
+https://opendata.ecdc.europa.eu/covid19/casedistribution/csv
 
 In this project we use maps library to get the world maps coordinate to map it. Using the world maps, we map thecorona virus infected distribution using the dataset. Because the some of the corona dataset region name didn't match with the available maps data. So we change the corona dataset region to match with the world map data(at line 26 to 198). In the world map data some region are separated therefore to match with our corona dataset we merge those region. some of the example are : "Saint Kitts" and "Nevis" are merged into "Saint Kitts and Nevis". This task is being done at line 205 to 218. After matching the corona dataset region name with the world map we left join the dataset.
 
