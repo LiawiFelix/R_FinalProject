@@ -1,12 +1,12 @@
 Topic: Corona 52 Week in 2020 Animated Plot\
-Team Member: 0716103 潘建琿,0716106 洪德輝,0716336 郭志龍
+Team Member: 0716103 潘建琿, 0716106 洪德輝, 0716336 郭志龍
 
 Library Used:\
--maps\
--dplyr\
--scales\
--ggplot2\
--animation
+- maps\
+- dplyr\
+- scales\
+- ggplot2\
+- animation
 
 Dataset:\
 https://data.europa.eu/euodp/en/data/dataset/covid-19-coronavirus-data
