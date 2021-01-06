@@ -1,5 +1,6 @@
 Topic: Corona 52 Week in 2020 Animated Plot
 Team Member: 0716103 潘建琿, 0716106 洪德輝, 0716336 郭志龍
+Github Repository: https://github.com/LiawiFelix/R_FinalProject
 
 Library Used:
 - maps
