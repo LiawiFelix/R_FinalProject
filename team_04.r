@@ -1,16 +1,17 @@
-# install.packages("dplyr")
-# install.packages("maps")
-# install.packages("ggplot2")
-# install.packages("scales")
-# install.packages("animation")
+#uncomment below if you haven't install the packages
+#install.packages("dplyr")
+#install.packages("maps")
+#install.packages("ggplot2")
+#install.packages("scales")
+#install.packages("animation")
 library(dplyr)
 library(scales)
 library(maps) 
 library(ggplot2)
 library(animation)
 
-# import data from dataset 'covid-19'
-df.raw <- read.csv("C://Users/felix/Downloads/111.csv")
+# import data from dataset 'covid-19', no need to add '.csv' to the downloaded dataset
+df.raw <- read.csv("C://Users/felix/Downloads/download")
 names(df.raw)[5]<-"region"
 
 for(i in nrow(df.raw):1){
@@ -220,9 +221,10 @@ plot_list= list()
 
 world<-ggplot()+ geom_polygon(data = worldMap, aes(x=long, y = lat, group = group),fill="white")
 
-for(i in (1:52)){
+for(i in (1:length(unique_year_week))){
   join_result1 <- join_result %>%filter(year_week == unique_year_week[i])
-  t= paste0("Year 2020 Week ",i)
+  split_res= strsplit(unique_year_week[i],'-')
+  t= paste0("Year ",unlist(split_res)[1]," Week ",unlist(split_res)[2])
   # print(unique_year_week[i])
   plot_list[[i]] <- world +
     geom_polygon(data = join_result1, aes(x=long, y = lat, fill=cases_weekly, group = group),
@@ -230,7 +232,7 @@ for(i in (1:52)){
     coord_fixed(1.3) +
     scale_fill_gradientn("# of infected cases",colors=c("white","yellow","red","brown"),
                          values=rescale(c(0,100,1000,10000,100000,1000000,10000000)),
-                         limits=c(0,20000000), na.value="white")+
+                         limits=c(0,md), na.value="white")+
     labs(title=t)
 }
 
