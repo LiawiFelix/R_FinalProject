@@ -11,6 +11,7 @@ Library Used:
 -ggthemes
 -tibble
 -lubridate
+-gganimate
 -animation
 
 Data:
