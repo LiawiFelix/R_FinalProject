@@ -243,5 +243,5 @@ animation::saveGIF(
     }
     
   },
-  movie.name = "runresult.gif", ani.width= 800, ani.height= 600
+  movie.name = "team_04.gif", ani.width= 800, ani.height= 600
 )
